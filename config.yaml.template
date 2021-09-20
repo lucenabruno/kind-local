@@ -1,0 +1,26 @@
+---
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30201
+        hostPort: 30201
+        listenAddress: "0.0.0.0"
+  - role: worker
+    extraPortMappings:
+    - containerPort: 32080
+      hostPort: 32081
+      listenAddress: "0.0.0.0"
+    - containerPort: 31566
+      hostPort: 31567
+      listenAddress: "0.0.0.0"
+    - containerPort: 31571
+      hostPort: 31572
+      listenAddress: "0.0.0.0"
+networking:
+  disableDefaultCNI: true
+containerdConfigPatches: 
+- |-
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5000"]
+    endpoint = ["http://%REG_IP%:5000"]

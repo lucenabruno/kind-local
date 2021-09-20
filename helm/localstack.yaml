@@ -1,0 +1,43 @@
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+debug: false
+
+# This will enable the Docker daemon binding and allow
+# Localstack to provide Lambdas and other AWS services
+# who got container runtime dependencies
+mountDind:
+  enabled: false
+  forceTLS: true
+  image: "docker:20.10-dind"
+
+service:
+  type: ClusterIP #NodePort
+  edgeService:
+    name: edge
+    targetPort: 4566
+    nodePort: 31566
+  apiServices:
+    - name: es
+      targetPort: 4571
+      nodePort: 31571
+
+ingress:
+  enabled: false # error
+  annotations:
+    kubernetes.io/ingress.class: kong
+  hosts:
+    - host: kong.local
+      paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local

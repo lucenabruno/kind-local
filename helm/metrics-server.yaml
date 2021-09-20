@@ -1,0 +1,23 @@
+apiService:
+  ## @param apiService.create Specifies whether the v1beta1.metrics.k8s.io API service should be created. You can check if it is needed with `kubectl get --raw "/apis/metrics.k8s.io/v1beta1/nodes"`.
+  ## This is still necessary up to at least k8s version >= 1.21, but depends on vendors and cloud providers.
+  ##
+  create: true # kind
+## @param securePort Port where metrics-server will be running
+##
+securePort: 8443
+## @param hostNetwork Enable hostNetwork mode
+## You would require this enabled if you use alternate overlay networking for pods and
+## API server unable to communicate with metrics-server. As an example, this is required
+## if you use Weave network on EKS
+##
+hostNetwork: false
+## @param command Override default container command (useful when using custom images)
+##
+command: ["metrics-server"]
+## @param extraArgs Extra arguments to pass to metrics-server on start up
+## ref: https://github.com/kubernetes-incubator/metrics-server/blob/master/README.md#flags
+##
+extraArgs:
+  kubelet-insecure-tls: true
+  kubelet-preferred-address-types: InternalIP,Hostname,InternalDNS,ExternalDNS,ExternalIP
